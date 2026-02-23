@@ -15,6 +15,22 @@ public class QuantityMeasurementApp {
 
 		System.out.println("Input: " + first + " and " + second);
 		System.out.println("Output: Equal (" + result + ")");
-		input.close();
+		
+		 System.out.println("----------------------------------");
+
+	        // -------- Inches Equality --------
+	        System.out.println("Enter first no. (inch): ");
+	        Inches firstInch = new Inches(input.nextDouble());
+
+	        System.out.println("Enter second no. (inch): ");
+	        Inches secondInch = new Inches(input.nextDouble());
+
+	        boolean inchResult = firstInch.equals(secondInch);
+
+	        System.out.println("Input: " + firstInch + " and " + secondInch);
+	        System.out.println("Output: Equal (" + inchResult + ")");
+
+	        input.close();
+		
 	}
 }
