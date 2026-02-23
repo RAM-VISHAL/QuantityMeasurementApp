@@ -14,7 +14,7 @@ public class QuantityMeasurementApp {
 
         @Override
         public boolean equals(Object obj) {
-        	//checking object
+        	//checking object 
             if (this == obj) return true;
             //checking if objects of same class 
             if (obj == null || getClass() != obj.getClass()) return false;

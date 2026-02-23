@@ -17,7 +17,7 @@ public class QuantityMeasurementAppTest {
 	@Test
 	public void estEquality_DifferentValue()
 	{
-	    // Verifies that two numerical values of 1.0 ft and 2.0 ft are not equal.
+	    // Verifies that two numerical values of 1.0 ft and 2.0 ft are not equal
 		assertNotEquals(new Feet(1.0), new Feet(2.0));
 	}
 	
