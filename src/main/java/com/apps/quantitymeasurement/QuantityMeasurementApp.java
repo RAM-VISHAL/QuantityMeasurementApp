@@ -61,8 +61,8 @@ public class QuantityMeasurementApp {
     
     public static void demonstrateInchesEquality() {
     	Inches inch1=new Inches(1.0);
-    	Inches inch2=new Inches(1.0);
-    	System.out.println("Input: 1.0 ft and 1.0 ft");
+    	Inches inch2=new Inches(2.0);
+    	System.out.println("Input: 1.0 inch and 1.0 inch ft");
     	System.out.println("Output: Equal ("+inch1.equals(inch2)+")");
     }
     
@@ -70,6 +70,8 @@ public class QuantityMeasurementApp {
     //The main method
     public static void main(String[] args) {
         demonstrateFeetEquality();
-        demonstrateFeetEquality();
+        //demonstrateFeetEquality();
+        demonstrateInchesEquality();
+       
     }
 }
