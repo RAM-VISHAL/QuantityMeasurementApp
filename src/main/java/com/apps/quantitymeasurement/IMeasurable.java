@@ -1,22 +1,29 @@
 package com.apps.quantitymeasurement;
 
 /**
- * IMeasurable interface defines the contract for measurable units.
- * Serves as a common abstraction for different types of measurements (Length, Weight, etc.).
+ * UC14 Refactor: Added default methods to selectively disable arithmetic for specific categories.
  */
 public interface IMeasurable {
-    /**
-     * @return the conversion factor to the base unit
-     */
-    double getConversionFactor();
-
-    /**
-     * Convert value from this unit to the base unit.
-     */
+    
     double convertToBaseUnit(double value);
+    double convertFromBaseUnit(double value);
 
     /**
-     * Convert value from the base unit to this unit.
+     * Functional Interface pattern conceptually built-in.
+     * By default, all standard measurement units support arithmetic.
      */
-    double convertFromBaseUnit(double baseValue);
+    default boolean supportsArithmetic() {
+        return true;
+    }
+
+    /**
+     * Validates if the operation is supported. Throws an exception if not.
+     */
+    default void validateOperationSupport(String operationName) {
+        if (!supportsArithmetic()) {
+            throw new UnsupportedOperationException(
+                "Arithmetic operations (" + operationName + ") are not supported for " + this.getClass().getSimpleName()
+            );
+        }
+    }
 }
