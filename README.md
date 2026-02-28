@@ -34,4 +34,4 @@ Invalid inputs throw `IllegalArgumentException`.
 - Reuse of conversion logic from UC5
 
 🔗 _Code Link:_ 
-👉 [UC6 – Addition of Two Length Units](https://github.com/Deepanshukhoushi/QuantityMeasurementApp/tree/feature/feature/UC6-UnitAddition)
+👉 [UC6 – Addition of Two Length Units](https://github.com/RAM-VISHAL/QuantityMeasurementApp/tree/feature/UC6-UnitAddition/src)
