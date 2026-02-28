@@ -34,4 +34,4 @@ Invalid inputs throw `IllegalArgumentException`.
 - Clear and scalable API design
 
 🔗 _Code Link:_ 
-👉 [UC7 – Addition with Target Unit Specification](https://github.com/Deepanshukhoushi/QuantityMeasurementApp/tree/feature/UC7-TargetUnitAddition)
+👉 [UC7 – Addition with Target Unit Specification](https://github.com/RAM-VISHAL/QuantityMeasurementApp/tree/feature/UC7-TargetUnitAddition/src)
