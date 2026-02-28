@@ -34,6 +34,6 @@ To centralize unit conversion responsibility inside `LengthUnit` and simplify `Q
 - Improved cohesion and reduced coupling
 
 🔗 _Code Link:_ 
-👉 [UC8 – Standalone LengthUnit with Conversion Responsibility](https://github.com/Deepanshukhoushi/QuantityMeasurementApp/tree/feature/UC8-StandaloneUnit)
+👉 [UC8 – Standalone LengthUnit with Conversion Responsibility](https://github.com/RAM-VISHAL/QuantityMeasurementApp/tree/feature/UC8-StandaloneUnit/src)
 
 ---
