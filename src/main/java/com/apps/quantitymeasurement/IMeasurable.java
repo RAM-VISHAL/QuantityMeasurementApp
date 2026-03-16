@@ -1,29 +1,38 @@
 package com.apps.quantitymeasurement;
 
-/**
- * UC14 Refactor: Added default methods to selectively disable arithmetic for specific categories.
- */
 public interface IMeasurable {
-    
-    double convertToBaseUnit(double value);
-    double convertFromBaseUnit(double value);
 
-    /**
-     * Functional Interface pattern conceptually built-in.
-     * By default, all standard measurement units support arithmetic.
-     */
-    default boolean supportsArithmetic() {
-        return true;
-    }
+	double getConversionFactor();
 
-    /**
-     * Validates if the operation is supported. Throws an exception if not.
-     */
-    default void validateOperationSupport(String operationName) {
-        if (!supportsArithmetic()) {
-            throw new UnsupportedOperationException(
-                "Arithmetic operations (" + operationName + ") are not supported for " + this.getClass().getSimpleName()
-            );
-        }
-    }
+	double convertToBaseUnit(double value);
+
+	double convertFromBaseUnit(double baseValue);
+
+	String getUnitName();
+
+	String getMeasurementType();
+
+	static IMeasurable getUnitByName(String unitName, String measurementType) {
+		switch (measurementType) {
+			case "LengthUnit":
+				return LengthUnit.valueOf(unitName);
+			case "WeightUnit":
+				return WeightUnit.valueOf(unitName);
+			case "VolumeUnit":
+				return VolumeUnit.valueOf(unitName);
+			case "TemperatureUnit":
+				return TemperatureUnit.valueOf(unitName);
+			default:
+				throw new IllegalArgumentException("Unknown measurement type: " + measurementType);
+		}
+	}
+
+	SupportsArithmetic supportsArithmetic = () -> true;
+
+	default boolean supportsArithmetic() {
+		return supportsArithmetic.isSupported();
+	}
+
+	default void validateOperationSupport(String operation) {
+	}
 }
