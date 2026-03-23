@@ -1,5 +1,9 @@
 package com.app.quantitymeasurementapp.exception;
 
+/**
+ * Base exception class for the Quantity Measurement Application.
+ * Extends RuntimeException to allow unchecked exception handling across layers.
+ */
 public class QuantityMeasurementException extends RuntimeException {
     
     public QuantityMeasurementException(String message) {

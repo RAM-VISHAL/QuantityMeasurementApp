@@ -1,82 +1,102 @@
 package com.app.quantitymeasurementapp.controller;
 
-import java.util.logging.Logger;
-import com.app.quantitymeasurementapp.entity.QuantityDTO;
+import com.app.quantitymeasurementapp.model.QuantityInputDTO;
+import com.app.quantitymeasurementapp.model.QuantityMeasurementDTO;
 import com.app.quantitymeasurementapp.service.IQuantityMeasurementService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
- * Controller Layer for the Quantity Measurement Application.
- * Handles request routing and delegates business logic to the Service layer.
+ * UC 17 Enhancement:
+ * Refactored into a Spring Boot @RestController. 
+ * This class exposes all Quantity Measurement operations as RESTful APIs.
  */
+@RestController
+@RequestMapping("/api/v1/quantities")
+@Tag(name = "Quantity Measurements", description = "Endpoints for performing quantity measurement operations")
 public class QuantityMeasurementController {
 
-    // Logger for logging information and errors in the controller
-    private static final Logger logger = Logger.getLogger(QuantityMeasurementController.class.getName());
+    @Autowired
+    private IQuantityMeasurementService service;
 
-    private final IQuantityMeasurementService quantityMeasurementService;
-
-    /**
-     * Constructor using Dependency Injection for the Service.
-     * @param quantityMeasurementService implementation of the service interface
-     */
-    public QuantityMeasurementController(IQuantityMeasurementService quantityMeasurementService) {
-        this.quantityMeasurementService = quantityMeasurementService;
-        logger.info("QuantityMeasurementController initialized with service: " + 
-                    quantityMeasurementService.getClass().getSimpleName());
+    @PostMapping("/compare")
+    @Operation(summary = "Compare two quantities to see if they are mathematically equal")
+    public ResponseEntity<QuantityMeasurementDTO> compareQuantities(@Valid @RequestBody QuantityInputDTO input) {
+        QuantityMeasurementDTO result = service.compare(input.getThisQuantityDTO(), input.getThatQuantityDTO());
+        return ResponseEntity.ok(result);
     }
 
-    /**
-     * Routes a comparison request to the service layer.
-     */
-    public boolean performComparison(QuantityDTO q1, QuantityDTO q2) {
-        logger.info("Controller: Comparison requested for " + q1 + " and " + q2);
-        return quantityMeasurementService.compare(q1, q2);
+    @PostMapping("/convert")
+    @Operation(summary = "Convert a quantity to a different target unit")
+    public ResponseEntity<QuantityMeasurementDTO> convertQuantity(@Valid @RequestBody QuantityInputDTO input) {
+        QuantityMeasurementDTO result = service.convert(input.getThisQuantityDTO(), input.getThatQuantityDTO());
+        return ResponseEntity.ok(result);
     }
 
-    /**
-     * Routes an addition request to the service layer.
-     */
-    public QuantityDTO performAddition(QuantityDTO q1, QuantityDTO q2, String targetUnit) {
-        logger.info("Controller: Addition requested for " + q1 + " + " + q2 + " to " + targetUnit);
-        return quantityMeasurementService.add(q1, q2, targetUnit);
+    @PostMapping("/add")
+    @Operation(summary = "Add two quantities together (returns result in the first quantity's unit)")
+    public ResponseEntity<QuantityMeasurementDTO> addQuantities(@Valid @RequestBody QuantityInputDTO input) {
+        QuantityMeasurementDTO result = service.add(input.getThisQuantityDTO(), input.getThatQuantityDTO());
+        return ResponseEntity.ok(result);
     }
 
-    /**
-     * Routes a conversion request to the service layer.
-     */
-    public QuantityDTO performConversion(QuantityDTO source, String targetUnit) {
-        logger.info("Controller: Conversion requested for " + source + " to " + targetUnit);
-        return quantityMeasurementService.convert(source, targetUnit);
+    @PostMapping("/add-with-target-unit")
+    @Operation(summary = "Add two quantities and convert the result to a specified target unit")
+    public ResponseEntity<QuantityMeasurementDTO> addQuantitiesWithTarget(@Valid @RequestBody QuantityInputDTO input) {
+        QuantityMeasurementDTO result = service.add(input.getThisQuantityDTO(), input.getThatQuantityDTO(), input.getTargetQuantityDTO());
+        return ResponseEntity.ok(result);
     }
 
-    /**
-     * Demonstrates the application flow with various operations.
-     * Useful for manual testing and verification of the audit history.
-     */
-    public void demonstrateApp() {
-        logger.info("Starting Application Demonstration...");
+    @PostMapping("/subtract")
+    @Operation(summary = "Subtract the second quantity from the first")
+    public ResponseEntity<QuantityMeasurementDTO> subtractQuantities(@Valid @RequestBody QuantityInputDTO input) {
+        QuantityMeasurementDTO result = service.subtract(input.getThisQuantityDTO(), input.getThatQuantityDTO());
+        return ResponseEntity.ok(result);
+    }
 
-        try {
-            // 1. Comparison Test
-            QuantityDTO feet = new QuantityDTO(1.0, "FEET", "LengthUnit");
-            QuantityDTO inches = new QuantityDTO(12.0, "INCHES", "LengthUnit");
-            boolean isEqual = performComparison(feet, inches);
-            logger.info("Comparison (1 ft == 12 in): " + isEqual);
+    @PostMapping("/subtract-with-target-unit")
+    @Operation(summary = "Subtract the second quantity from the first and convert to a target unit")
+    public ResponseEntity<QuantityMeasurementDTO> subtractQuantitiesWithTarget(@Valid @RequestBody QuantityInputDTO input) {
+        QuantityMeasurementDTO result = service.subtract(input.getThisQuantityDTO(), input.getThatQuantityDTO(), input.getTargetQuantityDTO());
+        return ResponseEntity.ok(result);
+    }
 
-            // 2. Addition Test
-            QuantityDTO inch1 = new QuantityDTO(2.0, "INCHES", "LengthUnit");
-            QuantityDTO result = performAddition(inch1, inch1, "CENTIMETERS");
-            logger.info("Addition (2 in + 2 in): " + result.value + " " + result.unit);
+    @PostMapping("/divide")
+    @Operation(summary = "Divide the first quantity by the second (returns a ratio)")
+    public ResponseEntity<QuantityMeasurementDTO> divideQuantities(@Valid @RequestBody QuantityInputDTO input) {
+        QuantityMeasurementDTO result = service.divide(input.getThisQuantityDTO(), input.getThatQuantityDTO());
+        return ResponseEntity.ok(result);
+    }
 
-            // 3. Expected Error Test (Cross-category addition)
-            logger.info("Testing Expected Error (Feet + Kilograms)...");
-            QuantityDTO weight = new QuantityDTO(1.0, "KILOGRAM", "WeightUnit");
-            performAddition(feet, weight, "FEET");
+    // --- History & Audit Endpoints ---
 
-        } catch (Exception e) {
-            logger.warning("Demonstration gracefully caught expected logic error: " + e.getMessage());
-        }
+    @GetMapping("/history/operation/{operation}")
+    @Operation(summary = "Get a history of all calculations for a specific operation (e.g., ADD, CONVERT)")
+    public ResponseEntity<List<QuantityMeasurementDTO>> getOperationHistory(@PathVariable String operation) {
+        return ResponseEntity.ok(service.getOperationHistory(operation));
+    }
 
-        logger.info("Demonstration Complete. Check Audit History for details.");
+    @GetMapping("/history/type/{type}")
+    @Operation(summary = "Get a history of all calculations for a specific measurement type (e.g., LengthUnit)")
+    public ResponseEntity<List<QuantityMeasurementDTO>> getMeasurementsByType(@PathVariable String type) {
+        return ResponseEntity.ok(service.getMeasurementsByType(type));
+    }
+
+    @GetMapping("/count/{operation}")
+    @Operation(summary = "Get the total number of times a specific successful operation has occurred")
+    public ResponseEntity<Long> getOperationCount(@PathVariable String operation) {
+        return ResponseEntity.ok(service.getOperationCount(operation));
+    }
+
+    @GetMapping("/history/errored")
+    @Operation(summary = "Get a history of all operations that failed or threw exceptions")
+    public ResponseEntity<List<QuantityMeasurementDTO>> getErrorHistory() {
+        return ResponseEntity.ok(service.getErrorHistory());
     }
 }
