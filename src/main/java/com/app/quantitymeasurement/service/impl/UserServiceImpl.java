@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService{
 				.orElseThrow(() -> new UserNotFoundException("User with user id " + id + " does not exist!"));
 		return userResponseMapper.mapTo(user);
 	}
-;
+
 	@Override
 	public String login(LoginDto loginDto) {
 		Authentication authentication = authenticationManager

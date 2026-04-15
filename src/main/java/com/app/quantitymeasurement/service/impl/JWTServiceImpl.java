@@ -19,7 +19,7 @@ public class JWTServiceImpl implements JWTService {
     private String secretKey;
 
     private SecretKey getKey() {
-        byte[] keyBytes = Base64.getDecoder().decode(secretKey);
+        byte[] keyBytes = Base64.getUrlDecoder().decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

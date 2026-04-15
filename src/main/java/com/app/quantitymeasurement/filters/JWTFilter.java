@@ -29,11 +29,18 @@ public class JWTFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException,
             IOException {
+    	
+    	 // ✅ VERY IMPORTANT FIX (ADD THIS BLOCK)
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        
         String authHeader = request.getHeader("Authorization");
         String username = null;
         String token = null;
 
-        if(authHeader != null && authHeader.startsWith("Bearer")) {
+        if(authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
             username = jwtService.extractUserName(token);
         }

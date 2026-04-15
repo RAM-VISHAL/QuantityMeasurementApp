@@ -51,6 +51,7 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
     @Override
     public QuantityMeasurementDTO compare(QuantityDTO thisDTO, QuantityDTO thatDTO) {
         try {
+        	log.info("validating compare request");
             validateSameType(thisDTO, thatDTO);
 
             double base1 = toBase(thisDTO);
